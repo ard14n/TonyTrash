@@ -18,3 +18,4 @@ Projektmitglieder
 
 - Dieses Repository bitte klonen
 - Tutorial: https://www.youtube.com/watch?v=qpXxcvS-g3g&feature=youtu.be
+- GitHub Desktop (Windows): https://desktop.github.com/
