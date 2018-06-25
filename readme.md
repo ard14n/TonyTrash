@@ -12,3 +12,10 @@ Projektmitglieder
 - Marc Rosenkranz (IchHeisseMarc)
 - Simon Evers (CaptainFlint0)
 - Ardian Jahja (ard14n)
+
+
+Hinweise für Projektmitglieder:
+
+Dieses Repository bitte klonen
+
+https://www.youtube.com/watch?v=qpXxcvS-g3g&feature=youtu.be
