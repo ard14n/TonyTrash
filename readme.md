@@ -14,8 +14,7 @@ Projektmitglieder
 - Ardian Jahja (ard14n)
 
 
-Hinweise für Projektmitglieder:
+<b>Hinweise für Projektmitglieder:</b>
 
-Dieses Repository bitte klonen
-
-https://www.youtube.com/watch?v=qpXxcvS-g3g&feature=youtu.be
+- Dieses Repository bitte klonen
+- Tutorial: https://www.youtube.com/watch?v=qpXxcvS-g3g&feature=youtu.be
