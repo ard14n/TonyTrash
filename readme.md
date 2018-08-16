@@ -14,9 +14,3 @@ Der Planet versinkt im Müll. Begleite Tony Trash auf seiner Mission, den Planet
 - Ardian Jahja (ard14n)
 
 
-<b>Hinweise für Projektmitglieder:</b>
-
-- Dieses Repository bitte klonen
-- Tutorial: https://www.youtube.com/watch?v=qpXxcvS-g3g&feature=youtu.be
-  alternativ: https://www.studica.com/blog/how-to-setup-github-with-unity-step-by-step-instructions
-- GitHub Desktop (Windows): https://desktop.github.com/
