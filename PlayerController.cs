@@ -59,6 +59,12 @@ public class PlayerController : MonoBehaviour {
                 }
             }
 
+        if (!isGrounded) //sliden wenn slopeLimit
+        {
+            moveDirection.x += (1f - hitNormal.y) * hitNormal.x * (moveSpeed - slideFriction);
+            moveDirection.z += (1f - hitNormal.y) * hitNormal.z * (moveSpeed - slideFriction);
+        }
+
         } else
             {
                 hitCounter -= Time.deltaTime;
