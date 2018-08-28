@@ -7,25 +7,29 @@ using UnityEngine;
  * Josephine Eckhoff
  **/
 
-public class PlatformBreaks : MonoBehaviour {
+public class PlatformBreaks : MonoBehaviour
+{
 
     public GameObject Player;
-    public float cubeSize = 0.2f;
-    public int cubesInRow = 2;
-    public float radius = 5.0f;
-    public float power = 10.0f;
+    public float cubeSize = 0.3f;
+    public int cubesInRow = 5;
+    public float scatter = 15.0f;
+    public float duration = 3.0f;
 
     float cubesPivotDistance;
     Vector3 cubesPivot;
+
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         cubesPivotDistance = cubeSize * cubesInRow / 2;
         cubesPivot = new Vector3(cubesPivotDistance, cubesPivotDistance, cubesPivotDistance);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-   
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
 
     }
 
@@ -36,43 +40,44 @@ public class PlatformBreaks : MonoBehaviour {
         {
             BreakPlatform();
         }
-         
+
     }
+
+
     public void BreakPlatform()
     {
-        gameObject.SetActive(false);
+
         for (int x = 0; x < cubesInRow; x++)
         {
             for (int y = 0; y < 2; y++)
             {
                 for (int z = 0; z < cubesInRow; z++)
                 {
-                    brokenPieces(x, y, z);
+                    BrokenPieces(x, y, z);
                 }
             }
+
         }
-        //Position für Explosion
-        Vector3 explosionPos = transform.position;
-        Collider[] colliders = Physics.OverlapSphere(explosionPos, radius);
-        foreach (Collider hit in colliders)
-        {
-            Rigidbody rb = hit.GetComponent<Rigidbody>();
-            if (rb != null)
-                rb.AddExplosionForce(power, explosionPos, radius, 3.0f);
-        }
+        gameObject.SetActive(false);
     }
-    void brokenPieces(int x, int y, int z)
+
+
+    void BrokenPieces(int x, int y, int z)
     {
         //kleine Wuerfel erzeugen
-       GameObject smallCube;
+
+        GameObject smallCube;
         smallCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        smallCube.name = "cubePiece";
 
         smallCube.transform.position = transform.position + new Vector3(cubeSize * x, cubeSize * y, cubeSize * z) - cubesPivot;
         smallCube.transform.localScale = new Vector3(cubeSize, cubeSize, cubeSize);
         smallCube.GetComponent<Renderer>().material.color = new Color(0.0f, 1.0f, 0.0f);
 
         smallCube.AddComponent<Rigidbody>();
-        smallCube.AddComponent<Rigidbody>().mass = cubeSize;
-
+        smallCube.GetComponent<Rigidbody>().mass = 0.01f;
+        smallCube.GetComponent<Rigidbody>().AddForce(Random.Range(-scatter, scatter), 0, Random.Range(-scatter, scatter));
+        smallCube.GetComponent<Rigidbody>().AddTorque(Random.Range(-scatter, scatter) * 80, Random.Range(-scatter, scatter) * 80, Random.Range(-scatter, scatter) * 80);
+        Destroy(smallCube, duration);
     }
 }
