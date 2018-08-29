@@ -23,7 +23,13 @@ public class EnemyBehavior : MonoBehaviour {
     }
 
     void Update () {
-        
+
+        RaycastHit hit;
+        Ray downRay = new Ray(transform.position, -Vector3.up);
+        Physics.Raycast(downRay, out hit, Mathf.Infinity);
+        float down = hit.distance-0.00001f;
+        transform.position = new Vector3(transform.position.x, transform.position.y - down, transform.position.z);
+
 
         enemyInRange = false;
 
@@ -42,7 +48,7 @@ public class EnemyBehavior : MonoBehaviour {
         if(enemyInRange)
         {
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 2f*Time.deltaTime);
-            transform.position = new Vector3(transform.position.x, 0.3f, transform.position.z);
+            transform.position = new Vector3(transform.position.x, transform.position.y , transform.position.z);
         }
 
     }
