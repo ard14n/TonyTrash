@@ -15,16 +15,11 @@ public class OpenGate : MonoBehaviour {
         RightDoor = GameObject.Find("RightPivot").GetComponent<RightDoor>();
 		
 	}
-	
-    void OnTriggerEnter(Collider other)
-    {   
 
-        if(other.gameObject.tag == "DoorOpenerSphere")
-        {
-            LeftDoor.setOpened();
-            RightDoor.setOpened();
-        }
-        
-
+    public void OpenDoors() {
+        LeftDoor.setOpened();
+        RightDoor.setOpened();
     }
+	
+    
 }
