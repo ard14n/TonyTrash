@@ -11,14 +11,16 @@ public class PlatformBreaks : MonoBehaviour
 {
 
     public GameObject Player;
+    public Material newMaterialRef;
     public float cubeSize = 0.3f;
     public int cubesInRow = 5;
     public float scatter = 15.0f;
     public float duration = 3.0f;
 
+
+
     float cubesPivotDistance;
     Vector3 cubesPivot;
-
     // Use this for initialization
     void Start()
     {
@@ -72,7 +74,7 @@ public class PlatformBreaks : MonoBehaviour
 
         smallCube.transform.position = transform.position + new Vector3(cubeSize * x, cubeSize * y, cubeSize * z) - cubesPivot;
         smallCube.transform.localScale = new Vector3(cubeSize, cubeSize, cubeSize);
-        smallCube.GetComponent<Renderer>().material.color = new Color(0.0f, 1.0f, 0.0f);
+        smallCube.GetComponent<Renderer>().material = newMaterialRef;
 
         smallCube.AddComponent<Rigidbody>();
         smallCube.GetComponent<Rigidbody>().mass = 0.01f;
