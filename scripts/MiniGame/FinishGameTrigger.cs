@@ -22,8 +22,7 @@ public class FinishGameTrigger : MonoBehaviour {
             Debug.Log("Kugel hat Ziel erreicht");
             platformTrigger = GameObject.Find("PlatformTrigger");
             platformTrigger.GetComponent<ButtonTrigger>().MoveDown();
-            GameObject.Find("Gate").GetComponent<OpenGate>().OpenDoors();
-            
+            GameObject.Find("LevelOneManager").GetComponent<LevelOneManager>().SetMiniGameCompleted();
         }
     }
 }
