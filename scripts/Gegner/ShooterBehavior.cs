@@ -18,15 +18,13 @@ public class ShooterBehavior : MonoBehaviour {
 
             if (Time.frameCount%40==0){
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.forward, out hit, range)){
+            if (Physics.Raycast(transform.position, transform.forward, out hit, range))
+            {
                 GameObject newBall = Instantiate(ball, transform.position, transform.rotation) as GameObject;
                 newBall.GetComponent<Rigidbody>().velocity = (hit.point - transform.position).normalized * speed;
                 newBall.AddComponent<DamagePlayer>();
                 var destroyTime = 2;
                 Destroy(newBall, destroyTime);
-            }
-            else{
-                Debug.Log("Raytest");
             }
         }
     }
