@@ -5,6 +5,7 @@ using UnityEngine;
 /**
  * Größe der Platform verändert sich.
  * Quelle: https://www.youtube.com/watch?v=GB5mKBALeZw
+ * Josephine Eckhoff
  **/
 
 public class ChangeSize : MonoBehaviour
@@ -15,15 +16,16 @@ public class ChangeSize : MonoBehaviour
     public bool repeat;
     public float speed = 2f;
     public float duration = 5f;
+    public GameObject Player;
 
-    IEnumerator Start()
+    IEnumerator StartSize()
     {
-        minScale = transform.localScale;
+        maxScale = transform.localScale;
         while (repeat)
         {
             yield return Repeat(maxScale, minScale, duration);
             yield return Repeat(minScale, maxScale, duration);
-            
+
 
         }
     }
@@ -32,11 +34,20 @@ public class ChangeSize : MonoBehaviour
     {
         float i = 0.0f;
         float rate = (1.0f / time) * speed;
-        while(i < 1.0f)
+        while (i < 1.0f)
         {
             i += Time.deltaTime * rate;
             transform.localScale = Vector3.Lerp(a, b, i);
             yield return null;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+
+        if (other.gameObject == Player)
+        {
+            StartCoroutine(StartSize());
         }
     }
 
