@@ -14,9 +14,7 @@ public class ShooterBehavior : MonoBehaviour {
             transform.eulerAngles = new Vector3(0, Time.frameCount/5*2, 0);
         }
 
-
-
-            if (Time.frameCount%40==0){
+        if (Time.frameCount%40==0){
             RaycastHit hit;
             if (Physics.Raycast(transform.position, transform.forward, out hit, range))
             {

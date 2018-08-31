@@ -7,7 +7,6 @@ public class EnemyBehavior : MonoBehaviour {
     private CharacterController controller;
     private Vector3 lookRotation;
     private bool enemyInRange;
-    public float movementSpeed;
     public float sightRange;
     public GameObject target;
 
@@ -25,7 +24,6 @@ public class EnemyBehavior : MonoBehaviour {
         transform.position = new Vector3(transform.position.x, transform.position.y - down, transform.position.z);
 
         enemyInRange = false;
-
         Collider[] enemys = Physics.OverlapSphere (transform.position, sightRange);
 
         foreach(Collider element in enemys)
@@ -36,6 +34,7 @@ public class EnemyBehavior : MonoBehaviour {
                 target = element.gameObject;
             }
         }
+
         if (enemyInRange)
         {
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 2f * Time.deltaTime);

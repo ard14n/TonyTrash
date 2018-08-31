@@ -6,43 +6,32 @@ public class BossScript : MonoBehaviour {
 
     private CharacterController controller;
     private Vector3 lookRotation;
-
     private bool enemyInRange;
-
     public float movementSpeed;
     public float sightRange;
-
     public GameObject target;
     public int attack;
-
     public float range;
     public GameObject ball;
     public float speed;
-
     public int health;
-
-
 
     void Start ()
     {
         controller = GetComponent<CharacterController>();
         enemyInRange = false;
         attack = 0;
-
     }
 	
     void Update ()
     {
-
         RaycastHit downR;
         Ray downRay = new Ray(transform.position, -Vector3.up);
         Physics.Raycast(downRay, out downR, Mathf.Infinity);
         float down = downR.distance - 2.5f;
         transform.position = new Vector3(transform.position.x, transform.position.y - down, transform.position.z);
 
-
         enemyInRange = false;
-
         Collider[] enemys = Physics.OverlapSphere(transform.position, sightRange);
 
         foreach (Collider element in enemys)
@@ -71,7 +60,6 @@ public class BossScript : MonoBehaviour {
                 }
                 break;
 
-
             case 1:
                 transform.eulerAngles = new Vector3(0, Time.frameCount*2, 0);
                 if (Time.frameCount % 6 == 0)
@@ -91,7 +79,6 @@ public class BossScript : MonoBehaviour {
                 }
                 break;
 
-
             case 2:
                 if (enemyInRange)
                 {
@@ -107,14 +94,9 @@ public class BossScript : MonoBehaviour {
         if (health <= 0){
             Destroy(GameObject.Find("Boss"));
         }
-
-
     }
 
     public void MinusHealth(){
         health --;
     }
-
-
-
-}
+ }
