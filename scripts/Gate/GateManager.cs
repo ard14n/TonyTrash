@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OpenGate : MonoBehaviour {
+public class GateManager : MonoBehaviour {
 
     private LeftDoor LeftDoor;
     private RightDoor RightDoor;
