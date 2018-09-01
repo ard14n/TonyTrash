@@ -5,17 +5,17 @@ using UnityEngine;
 public class MiniGameController : MonoBehaviour {
 
     float smooth = 2f;
-    float angleup = -20f;
-    float angledown = 20f;
-    float angleleft = 20f;
-    float angleright = -20f;
 
-    float xforce = 10.0f;
-    float zforce = 10.0f;
+    public float angleup = -20f;
+    public float angledown = 20f;
+    public float angleleft = 20f;
+    public float angleright = -20f;
 
+    
     private GameObject ball;
     private Rigidbody ballbody;
     private GameObject platform;
+    private GameObject platformManager;
 
     private bool gamePlayed = false;
     private bool platformArrived = false;
@@ -27,8 +27,8 @@ public class MiniGameController : MonoBehaviour {
 
         ball = GameObject.Find("Kugel");
         ballbody = ball.GetComponent<Rigidbody>();
-        ballbody.maxAngularVelocity = 10000f;
-        platform = GameObject.Find("PlatformTrigger");
+        
+        platform = GameObject.Find("Platform");
         camera = GameObject.Find("MiniGameCamera").GetComponent<Camera>();
     }
 	
@@ -36,7 +36,7 @@ public class MiniGameController : MonoBehaviour {
 	void Update () {
 
         
-        if(gamePlayed == false && platform.GetComponent<ButtonTrigger>().PlatformArrived()) {
+        if(gamePlayed == false && platform.GetComponent<PlatformManagerMiniGame>().PlatformArrived()) {
 
             Debug.Log("Plattform ist oben jetzt gehts los");
 
@@ -79,9 +79,14 @@ public class MiniGameController : MonoBehaviour {
         }
 
         
-        
-
-        
-
     }
+
+    public void SetMiniGameWon() {
+
+
+        GameObject.Find("Platform").GetComponent<PlatformManagerMiniGame>().SetPlatformMoveDown();
+        GameObject.Find("LevelOneManager").GetComponent<LevelOneManager>().SetMiniGameCompleted();
+
+
+}
 }

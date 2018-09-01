@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class FinishGameTrigger : MonoBehaviour {
 
-    private GameObject platformTrigger;
+    
 
-
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -18,11 +17,12 @@ public class FinishGameTrigger : MonoBehaviour {
 	}
 
     void OnTriggerEnter(Collider other) {
+
         if(other.tag == "MiniGameSphere") {
+
             Debug.Log("Kugel hat Ziel erreicht");
-            platformTrigger = GameObject.Find("PlatformTrigger");
-            platformTrigger.GetComponent<ButtonTrigger>().MoveDown();
-            GameObject.Find("LevelOneManager").GetComponent<LevelOneManager>().SetMiniGameCompleted();
+            GameObject.Find("MiniGamePivot").GetComponent<MiniGameController>().SetMiniGameWon();
+            
         }
     }
 }
