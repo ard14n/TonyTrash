@@ -21,7 +21,7 @@ public class ShooterBehavior : MonoBehaviour {
                 GameObject newBall = Instantiate(ball, transform.position, transform.rotation) as GameObject;
                 newBall.GetComponent<Rigidbody>().velocity = (hit.point - transform.position).normalized * speed;
                 newBall.AddComponent<DamagePlayer>();
-                var destroyTime = 2;
+                var destroyTime = 0.5f;
                 Destroy(newBall, destroyTime);
             }
         }

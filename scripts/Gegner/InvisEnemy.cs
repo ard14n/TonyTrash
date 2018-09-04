@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class InvisEnemy : MonoBehaviour {
 
-    private CharacterController controller;
     private bool enemyInRange;
     public float sightRange;
     public GameObject target;
 
     void Start()
     {
-        controller = GetComponent<CharacterController>();
         enemyInRange = false;
 
         Color col = gameObject.GetComponent<Renderer>().material.color;

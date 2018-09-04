@@ -10,17 +10,21 @@ public class BossScript : MonoBehaviour {
     public float movementSpeed;
     public float sightRange;
     public GameObject target;
-    public int attack;
+    private int attack;
     public float range;
     public GameObject ball;
     public float speed;
     public int health;
+    public int counter;
+    public int lastA;
 
     void Start ()
     {
         controller = GetComponent<CharacterController>();
         enemyInRange = false;
         attack = 0;
+        counter = 0;
+        lastA = 0;
     }
 	
     void Update ()
@@ -44,7 +48,25 @@ public class BossScript : MonoBehaviour {
         }
 
         if (Time.frameCount%600 == 0){
-            attack = Random.Range(1, 3);
+            if (counter == 1){
+                if (lastA == 1)
+                {
+                    attack = 2;
+                    counter = 0;
+                }
+                else if (lastA == 2)
+                {
+                    attack = 1;
+                    counter = 0;
+                }
+            }
+            else
+            {
+                attack = Random.Range(1, 3);
+                if (attack == lastA){
+                    counter++;
+                }
+            }
         }
 
         if ((Time.frameCount-300)%600 == 0){
@@ -61,6 +83,7 @@ public class BossScript : MonoBehaviour {
                 break;
 
             case 1:
+                lastA = 1;
                 transform.eulerAngles = new Vector3(0, Time.frameCount*2, 0);
                 if (Time.frameCount % 6 == 0)
                 {
@@ -80,6 +103,7 @@ public class BossScript : MonoBehaviour {
                 break;
 
             case 2:
+                lastA = 2;
                 if (enemyInRange)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 12f * Time.deltaTime);

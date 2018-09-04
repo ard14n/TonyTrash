@@ -4,14 +4,11 @@ using System.Collections.Generic;
 
 public class EnemyBehavior : MonoBehaviour {
 
-    private CharacterController controller;
-    private Vector3 lookRotation;
     private bool enemyInRange;
     public float sightRange;
     public GameObject target;
 
     void Start () {
-        controller = GetComponent<CharacterController> ();
         enemyInRange = false;
     }
 
