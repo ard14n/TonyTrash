@@ -8,6 +8,11 @@ public class BuildMinigamePlatform : MonoBehaviour {
     private GameObject miniGamePivotPoint;
     private GameObject miniGameCube;
 
+    public Material baseMaterial;
+    public Material sphereMaterial;
+
+    public bool startBuilding = false;
+
     // Use this for initialization
     void Start() {
 
@@ -20,8 +25,11 @@ public class BuildMinigamePlatform : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
+
+        if (startBuilding) {
+
+        }
 
     }
 
@@ -38,6 +46,24 @@ public class BuildMinigamePlatform : MonoBehaviour {
         miniGameCube.transform.SetParent(miniGamePivotPoint.transform);
         miniGameCube.transform.localScale = new Vector3(1, 1, 1);
         miniGameCube.transform.localPosition = cubeDestination;
+        
+        miniGameCube.AddComponent<BoxCollider>();
+
+        Rigidbody basebody = miniGameCube.AddComponent<Rigidbody>();
+        basebody.mass = 100;
+        basebody.drag = 0;
+        basebody.angularDrag = 0;
+        basebody.isKinematic = true;
+        basebody.useGravity = false;
+
+        try {
+
+            baseMaterial = Resources.Load("Orange", typeof(Material)) as Material;
+            miniGameCube.GetComponent<Renderer>().material = baseMaterial;
+
+        } catch {
+
+        }
 
     }
 
@@ -97,10 +123,28 @@ public class BuildMinigamePlatform : MonoBehaviour {
     private void BuildSphere() {
 
         GameObject ball = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        ball.name = "Ball";
+        ball.name = "Kugel";
         ball.transform.SetParent(minigame.transform);
         ball.transform.localPosition = new Vector3(152.4384f, 171.387f, -15.95023f);
         ball.transform.localScale = new Vector3(10,10,10);
+
+        ball.AddComponent<SphereCollider>();
+
+        Rigidbody ballbody = ball.AddComponent<Rigidbody>();
+        ballbody.mass = 7;
+        ballbody.useGravity = true;
+        ballbody.drag = 0;
+
+        try {
+
+            sphereMaterial = Resources.Load("Blue", typeof(Material)) as Material;
+            ball.GetComponent<Renderer>().material = sphereMaterial;
+
+        } catch {
+
+        }
+
+
 
     }
 
@@ -113,6 +157,30 @@ public class BuildMinigamePlatform : MonoBehaviour {
         miniGamePivotPoint.transform.SetParent(minigame.transform);
         miniGamePivotPoint.transform.localScale = new Vector3(100f, 10f, 100f);
         miniGamePivotPoint.transform.localPosition = pivotDestination;
+
+        miniGamePivotPoint.AddComponent<MiniGameController>();
+
+    }
+
+    private void BuildFinishGameTrigger() {
+
+        GameObject finishArea = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        finishArea.transform.SetParent(miniGameCube.transform);
+        finishArea.name = "KugelZiel";
+        finishArea.transform.localPosition = new Vector3(0.2468f, 0.618999f, 0.242f);
+        finishArea.transform.localScale = new Vector3(0.4f, 0.2f, 0.4f);
+
+        BoxCollider collider = finishArea.AddComponent<BoxCollider>();
+        collider.isTrigger = true;
+
+        finishArea.AddComponent<FinishGameTrigger>();
+        finishArea.GetComponent<MeshRenderer>().enabled = false;
+
+    }
+
+    private void StartBuilding() {
+
+        this.startBuilding = true;
 
     }
 }
