@@ -6,21 +6,49 @@ public class BuildMinigamePlatform : MonoBehaviour {
 
     private GameObject minigame;
     private GameObject miniGamePivotPoint;
-    private GameObject miniGameCube;
+    private GameObject miniGameBase;
+    private GameObject wallEast;
+    private GameObject wallSouth;
+    private GameObject wallWest;
+    private GameObject wallNorth;
+    private GameObject ball;
+
+    private Rigidbody ballbody;
+
+    private Vector3 baseSpawnPosition;
+    private Vector3 basePosition;
+
+    private Vector3 ballSpawn;
+    private Vector3 ballDestination;
+
+    private Vector3 wallSouthSpawn;
+    private Vector3 wallSouthDestination;
+
+    private Vector3 wallNorthSpawn;
+    private Vector3 wallNorthDestination;
+
+    private Vector3 wallEastSpawn;
+    private Vector3 wallEastDestination;
+
+    private Vector3 wallWestSpawn;
+    private Vector3 wallWestDestination;
 
     public Material baseMaterial;
     public Material sphereMaterial;
 
     public bool startBuilding = false;
-
+    
     // Use this for initialization
     void Start() {
 
         minigame = GameObject.Find("MiniGame");
+        GenerateSpawnPoints();
+        GeneratePositionPoints();
         BuildPivotPoint();
         BuildBase();
         BuildWalls();
         BuildSphere();
+        BuildFinishGameTrigger();
 
     }
 
@@ -29,6 +57,10 @@ public class BuildMinigamePlatform : MonoBehaviour {
 
         if (startBuilding) {
 
+            MoveToDestination();
+
+            
+
         }
 
     }
@@ -36,20 +68,17 @@ public class BuildMinigamePlatform : MonoBehaviour {
     
 
     private void BuildBase() {
-
-        Vector3 cubeSpawn = new Vector3(200, 200, 200);
-        Vector3 cubeDestination = new Vector3(0, 0.0470001f, 0);
-
-        miniGameCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-
-        miniGameCube.name = "DynamicBase";
-        miniGameCube.transform.SetParent(miniGamePivotPoint.transform);
-        miniGameCube.transform.localScale = new Vector3(1, 1, 1);
-        miniGameCube.transform.localPosition = cubeDestination;
         
-        miniGameCube.AddComponent<BoxCollider>();
+        miniGameBase = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
-        Rigidbody basebody = miniGameCube.AddComponent<Rigidbody>();
+        miniGameBase.name = "DynamicBase";
+        miniGameBase.transform.SetParent(miniGamePivotPoint.transform);
+        ScaleGameObject(miniGameBase, 1f, 1f, 1f);
+        miniGameBase.transform.localPosition = baseSpawnPosition;
+        
+        miniGameBase.AddComponent<BoxCollider>();
+
+        Rigidbody basebody = miniGameBase.AddComponent<Rigidbody>();
         basebody.mass = 100;
         basebody.drag = 0;
         basebody.angularDrag = 0;
@@ -59,78 +88,78 @@ public class BuildMinigamePlatform : MonoBehaviour {
         try {
 
             baseMaterial = Resources.Load("Orange", typeof(Material)) as Material;
-            miniGameCube.GetComponent<Renderer>().material = baseMaterial;
+            miniGameBase.GetComponent<Renderer>().material = baseMaterial;
 
         } catch {
 
         }
-
+        
     }
 
     private void BuildWalls() {
-
-        GameObject wallEast = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        wallEast.name = "WallEast";
-        wallEast.transform.SetParent(miniGameCube.transform);
-        wallEast.transform.localPosition = new Vector3(0.001826477f, 0.9599999f, -0.477f);
-        wallEast.transform.localScale = new Vector3(1, 0.05f, 1);
-        wallEast.transform.localRotation = Quaternion.Euler(90f, 0, 0);
         
-        GameObject wallSouth = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        wallEast = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        wallEast.name = "WallEast";
+        wallEast.transform.SetParent(miniGameBase.transform);
+        wallEast.transform.localPosition = wallEastSpawn;
+        ScaleGameObject(wallEast, 1f, 0.05f, 1f);
+        RotateGameObject(wallEast, 90f, 0f, 0f);
+
+        wallSouth = GameObject.CreatePrimitive(PrimitiveType.Cube);
         wallSouth.name = "WallSouth";
-        wallSouth.transform.SetParent(miniGameCube.transform);
-        wallSouth.transform.localPosition = new Vector3(-0.4761735f, 0.95f, -0.001000004f);
-        wallSouth.transform.localScale = new Vector3(1, 0.05f, 1);
-        wallSouth.transform.localRotation = Quaternion.Euler(90f, 90f, 0);
+        wallSouth.transform.SetParent(miniGameBase.transform);
+        wallSouth.transform.localPosition = wallSouthSpawn;
+        ScaleGameObject(wallSouth, 1f, 0.05f, 1f);
+        RotateGameObject(wallSouth, 90f, 90f, 0f);
 
-        GameObject wallNorth = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        wallNorth = GameObject.CreatePrimitive(PrimitiveType.Cube);
         wallNorth.name = "WallNorth";
-        wallNorth.transform.SetParent(miniGameCube.transform);
-        wallNorth.transform.localPosition = new Vector3(0.4738264f, 0.9299999f, 0);
-        wallNorth.transform.localScale = new Vector3(1, 0.05f, 1);
-        wallNorth.transform.localRotation = Quaternion.Euler(90f, 90f, 0);
+        wallNorth.transform.SetParent(miniGameBase.transform);
+        wallNorth.transform.localPosition = wallNorthSpawn;
+        ScaleGameObject(wallNorth, 1f, 0.05f, 1f);
+        RotateGameObject(wallNorth, 90f, 90f, 0f);
 
-        GameObject wallWest = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        wallWest = GameObject.CreatePrimitive(PrimitiveType.Cube);
         wallWest.name = "WallWest";
-        wallWest.transform.SetParent(miniGameCube.transform);
-        wallWest.transform.localPosition = new Vector3(0.001826477f, 0.9599999f, 0.472f);
-        wallWest.transform.localScale = new Vector3(1, 0.05f, 1);
-        wallWest.transform.localRotation = Quaternion.Euler(90f, 0, 0);
+        wallWest.transform.SetParent(miniGameBase.transform);
+        wallWest.transform.localPosition = wallWestSpawn;
+        ScaleGameObject(wallWest, 1f, 0.05f, 1f);
+        RotateGameObject(wallWest, 90f, 0f, 0f);
 
         GameObject cube5 = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cube5.name = "Cube5";
-        cube5.transform.SetParent(miniGameCube.transform);
+        cube5.transform.SetParent(miniGameBase.transform);
         cube5.transform.localPosition = new Vector3(-0.154f, 0.95f, -0.213f);
-        cube5.transform.localScale = new Vector3(0.5f, 0.05f, 1);
-        cube5.transform.localRotation = Quaternion.Euler(90f, 90f, 0);
+        ScaleGameObject(cube5, 0.5f, 0.05f, 1f);
+        RotateGameObject(cube5, 90f, 90f, 0f);
 
         GameObject cube6 = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cube6.name = "Cube6";
-        cube6.transform.SetParent(miniGameCube.transform);
+        cube6.transform.SetParent(miniGameBase.transform);
         cube6.transform.localPosition = new Vector3(0.051f, 0.95f, 0.233f);
-        cube6.transform.localScale = new Vector3(0.5f, 0.05f, 1);
-        cube6.transform.localRotation = Quaternion.Euler(90f, 90f, 0);
+        ScaleGameObject(cube6, 0.5f, 0.05f, 1);
+        RotateGameObject(cube6, 90f, 90f, 0f);
 
         GameObject cube7 = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cube7.name = "Cube7";
-        cube7.transform.SetParent(miniGameCube.transform);
+        cube7.transform.SetParent(miniGameBase.transform);
         cube7.transform.localPosition = new Vector3(0.371f, 0.95f, 0.017f);
-        cube7.transform.localScale = new Vector3(0.25f, 0.05f, 1);
-        cube7.transform.localRotation = Quaternion.Euler(90f, 90f, 90f);
+        ScaleGameObject(cube7, 0.25f, 0.05f, 1);
+        RotateGameObject(cube7, 90f, 90f, 90f);
 
     }
 
     private void BuildSphere() {
-
-        GameObject ball = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        
+        ball = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         ball.name = "Kugel";
         ball.transform.SetParent(minigame.transform);
-        ball.transform.localPosition = new Vector3(152.4384f, 171.387f, -15.95023f);
-        ball.transform.localScale = new Vector3(10,10,10);
+        ball.transform.localPosition = ballSpawn;
+        ScaleGameObject(ball, 10f, 10f, 10f);
 
         ball.AddComponent<SphereCollider>();
 
-        Rigidbody ballbody = ball.AddComponent<Rigidbody>();
+        ballbody = ball.AddComponent<Rigidbody>();
         ballbody.mass = 7;
         ballbody.useGravity = true;
         ballbody.drag = 0;
@@ -140,10 +169,10 @@ public class BuildMinigamePlatform : MonoBehaviour {
             sphereMaterial = Resources.Load("Blue", typeof(Material)) as Material;
             ball.GetComponent<Renderer>().material = sphereMaterial;
 
-        } catch {
+        } catch (System.Exception) {
+
 
         }
-
 
 
     }
@@ -151,11 +180,10 @@ public class BuildMinigamePlatform : MonoBehaviour {
     private void BuildPivotPoint() {
 
         Vector3 pivotDestination = new Vector3(181.3248f, 160.917f, 16.41764f);
-        miniGamePivotPoint = new GameObject();
-        miniGamePivotPoint.name = "DynamicPivotPoint";
-        
+        miniGamePivotPoint = new GameObject("DynamicPivotPoint");
+       
         miniGamePivotPoint.transform.SetParent(minigame.transform);
-        miniGamePivotPoint.transform.localScale = new Vector3(100f, 10f, 100f);
+        ScaleGameObject(miniGamePivotPoint, 100f, 10f, 100f);
         miniGamePivotPoint.transform.localPosition = pivotDestination;
 
         miniGamePivotPoint.AddComponent<MiniGameController>();
@@ -165,10 +193,10 @@ public class BuildMinigamePlatform : MonoBehaviour {
     private void BuildFinishGameTrigger() {
 
         GameObject finishArea = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        finishArea.transform.SetParent(miniGameCube.transform);
+        finishArea.transform.SetParent(miniGameBase.transform);
         finishArea.name = "KugelZiel";
         finishArea.transform.localPosition = new Vector3(0.2468f, 0.618999f, 0.242f);
-        finishArea.transform.localScale = new Vector3(0.4f, 0.2f, 0.4f);
+        ScaleGameObject(finishArea, 0.4f, 0.2f, 0.4f);
 
         BoxCollider collider = finishArea.AddComponent<BoxCollider>();
         collider.isTrigger = true;
@@ -178,8 +206,81 @@ public class BuildMinigamePlatform : MonoBehaviour {
 
     }
 
-    private void StartBuilding() {
+    private void GenerateSpawnPoints() {
 
+        wallEastSpawn = new Vector3(300, 300, -300);
+        wallWestSpawn = new Vector3(300, 300, 300);
+        wallNorthSpawn = new Vector3(300, 300, 0);
+        wallSouthSpawn = new Vector3(-300, 300, 0);
+
+        ballSpawn = new Vector3(1000, 1000, 1000);
+
+        baseSpawnPosition = new Vector3(500, 500, 500);
+
+    }
+
+    private void GeneratePositionPoints() {
+
+        basePosition = new Vector3(0f, 0.0470001f, 0f);
+        ballDestination = new Vector3(152.4f, 191.3f, -16f);
+        wallEastDestination = new Vector3(0.001826477f, 0.9599999f, -0.477f);
+        wallNorthDestination = new Vector3(0.4738264f, 0.9299999f, 0f);
+        wallSouthDestination = new Vector3(-0.4761735f, 0.95f, -0.001000004f);
+        wallWestDestination = new Vector3(0.001826477f, 0.9599999f, 0.472f);
+
+    }
+     
+    private bool CheckBaseBuild(){
+
+        if (miniGameBase.transform.localPosition == basePosition) {
+
+            return true;
+        }
+
+        return false;
+
+    }
+
+    private bool CheckSphereBuild() {
+
+        if (ball.transform.localPosition == ballDestination) {
+
+            return true;
+
+        }
+
+        return false;
+
+    }
+
+    private void RotateGameObject(GameObject g, float x, float y, float z){
+
+        g.transform.localRotation = Quaternion.Euler(x, y, z);
+
+    }
+
+    private void ScaleGameObject(GameObject g, float x, float y, float z) {
+
+        g.transform.localScale = new Vector3(x, y, z);
+
+    }
+
+    private void MoveToDestination(){
+
+        miniGameBase.transform.localPosition = Vector3.Lerp(miniGameBase.transform.localPosition, basePosition, Time.deltaTime*100f);
+        ball.transform.localPosition = Vector3.Lerp(ball.transform.localPosition, ballDestination, Time.deltaTime);
+        wallEast.transform.localPosition = Vector3.Lerp(wallEast.transform.localPosition, wallEastDestination, Time.deltaTime);
+        wallNorth.transform.localPosition = Vector3.Lerp(wallNorth.transform.localPosition, wallNorthDestination, Time.deltaTime);
+        wallSouth.transform.localPosition = Vector3.Lerp(wallSouth.transform.localPosition, wallSouthDestination, Time.deltaTime);
+        wallWest.transform.localPosition = Vector3.Lerp(wallWest.transform.localPosition, wallWestDestination, Time.deltaTime);
+
+    }
+
+    
+    
+    public void StartBuilding() {
+
+       
         this.startBuilding = true;
 
     }
