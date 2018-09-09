@@ -17,6 +17,11 @@ public class BossScript : MonoBehaviour {
     public int health;
     public int counter;
     public int lastA;
+    private float maxHeight;
+    private Vector3 targetPosi;
+    private float xdis;
+    private float zdis;
+    private float angle;
 
     void Start ()
     {
@@ -24,16 +29,17 @@ public class BossScript : MonoBehaviour {
         enemyInRange = false;
         attack = 0;
         counter = 0;
+        maxHeight = 20.0f;
         lastA = 0;
     }
 	
     void Update ()
     {
-        RaycastHit downR;
-        Ray downRay = new Ray(transform.position, -Vector3.up);
-        Physics.Raycast(downRay, out downR, Mathf.Infinity);
-        float down = downR.distance - 2.5f;
-        transform.position = new Vector3(transform.position.x, transform.position.y - down, transform.position.z);
+        //RaycastHit downR;
+        //Ray downRay = new Ray(transform.position, -Vector3.up);
+        //Physics.Raycast(downRay, out downR, Mathf.Infinity);
+        //float down = downR.distance - 2.5f;
+        //transform.position = new Vector3(transform.position.x, transform.position.y - down, transform.position.z);
 
         enemyInRange = false;
         Collider[] enemys = Physics.OverlapSphere(transform.position, sightRange);
@@ -51,18 +57,30 @@ public class BossScript : MonoBehaviour {
             if (counter == 1){
                 if (lastA == 1)
                 {
-                    attack = 2;
+                    attack = Random.Range(2, 5); ;
                     counter = 0;
                 }
                 else if (lastA == 2)
                 {
-                    attack = 1;
+                    List<int> numbersToChooseFrom = new List<int>(new int[] { 1, 3, 4 });
+                    attack = Random.Range(0, numbersToChooseFrom.Count);
+                    counter = 0;
+                }
+                else if (lastA == 3)
+                {
+                    List<int> numbersToChooseFrom = new List<int>(new int[] { 1, 2, 4 });
+                    attack = Random.Range(0, numbersToChooseFrom.Count);
+                    counter = 0;
+                }
+                else if (lastA == 4)
+                {
+                    attack = Random.Range(1, 4); ;
                     counter = 0;
                 }
             }
             else
             {
-                attack = Random.Range(1, 3);
+                attack = Random.Range(1, 5);
                 if (attack == lastA){
                     counter++;
                 }
@@ -112,6 +130,57 @@ public class BossScript : MonoBehaviour {
                         attack = 0;
                     }
                 }
+                break;
+
+            case 3:
+                lastA = 3;
+
+                if (Time.frameCount % 100 == 0)
+                {
+                    if (enemyInRange)
+                    {
+                        targetPosi = transform.position - target.transform.position;
+                        xdis = targetPosi.x;
+                        zdis = targetPosi.z;
+
+                    }
+                }
+
+                if (enemyInRange)
+                {
+                    if (Time.frameCount % 100 >= 0 && Time.frameCount % 100 <= 24)
+                    {
+                        transform.position = new Vector3(transform.position.x - (xdis / 50), transform.position.y + (maxHeight / 20), transform.position.z - (zdis / 50));
+                    }
+                    if (Time.frameCount % 100 >= 25 && Time.frameCount % 100 <= 49)
+                    {
+                        transform.position = new Vector3(transform.position.x - (xdis / 50), transform.position.y - (maxHeight / 20), transform.position.z - (zdis / 50));
+                    }
+                    if (Time.frameCount % 100 == 50)
+                    {
+                    enemyInRange = false;
+                    }
+                }
+                break;
+
+            case 4:
+                lastA = 4;
+                if (enemyInRange)
+                {
+
+                    angle = Vector3.Angle(transform.position, target.transform.position);
+                    transform.eulerAngles = new Vector3(0, angle, 0);
+
+                    if (Time.frameCount % 50 == 0)
+                    {
+                        GameObject newBall = Instantiate(ball, transform.position, transform.rotation) as GameObject;
+                        newBall.AddComponent<BossFollow>();
+                        newBall.AddComponent<DamagePlayer>();
+                        var destroyTime = 3;
+                        Destroy(newBall, destroyTime);
+                    }
+                }
+
                 break;
         }
 
