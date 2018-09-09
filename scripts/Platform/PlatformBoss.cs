@@ -74,7 +74,6 @@ public class PlatformBoss : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        //BreakPlatform wird aufgerufen, wenn Player die Platform berührt
         if (other.gameObject == Player)
         {
             Player.transform.parent = transform;
