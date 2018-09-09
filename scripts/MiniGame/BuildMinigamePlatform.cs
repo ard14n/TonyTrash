@@ -59,8 +59,6 @@ public class BuildMinigamePlatform : MonoBehaviour {
 
             MoveToDestination();
 
-            
-
         }
 
     }
