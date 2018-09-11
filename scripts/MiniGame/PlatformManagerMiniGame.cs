@@ -5,23 +5,33 @@ using UnityEngine;
 public class PlatformManagerMiniGame : MonoBehaviour {
 
 
+    
     private GameObject platform;
+
     private float smooth = 15f;
+
     private bool triggered = false;
+
     private Vector3 startposition;
     private Vector3 endposition;
     private float length;
     private float starttime;
+
     private bool platformArrived = false;
+
     private bool moveDown = false;
     private bool moveUp = false;
+    
 
     // Use this for initialization
     void Start () {
+
         endposition = new Vector3(12.48f, 177f, 104f);
         length = Vector3.Distance(startposition, endposition);
         platform = GameObject.Find("Platform");
         startposition = platform.transform.position;
+       
+
     }
 	
 	// Update is called once per frame
@@ -41,11 +51,13 @@ public class PlatformManagerMiniGame : MonoBehaviour {
 
     public void MoveDown() {
 
-        
         if (moveDown) {
+
+            
 
             Debug.Log("Move Down Funktion wurde aufgerufen");
             DisableCamera();
+
             startposition = platform.transform.position;
             endposition = new Vector3(12.48f, 1.21f, 104f);
             length = Vector3.Distance(startposition, endposition);
@@ -80,8 +92,6 @@ public class PlatformManagerMiniGame : MonoBehaviour {
 
     private void MoveUp() {
 
-        
-
         if (moveUp) {
 
             Debug.Log("MoveUp Funktion wurde aufgerufen");
@@ -93,9 +103,12 @@ public class PlatformManagerMiniGame : MonoBehaviour {
         }
 
     }
+
     
+
     public void SetPlatformMoveUp() {
 
+        
         starttime = Time.time;
         this.moveUp = true;
 
@@ -103,6 +116,7 @@ public class PlatformManagerMiniGame : MonoBehaviour {
 
     public void SetPlatformMoveDown() {
 
+        
         this.moveDown = true;
 
     }

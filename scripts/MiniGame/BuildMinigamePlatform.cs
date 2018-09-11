@@ -33,11 +33,12 @@ public class BuildMinigamePlatform : MonoBehaviour {
     private Vector3 wallWestSpawn;
     private Vector3 wallWestDestination;
 
+    [Header("Material Settings")]
     public Material baseMaterial;
     public Material sphereMaterial;
 
+    [Header("Toggle Build")]
     public bool startBuilding = false;
-    private bool startBuildingBase = true;
 
     private bool baseArrived = false;
     private bool ballArrived = false;
@@ -46,11 +47,7 @@ public class BuildMinigamePlatform : MonoBehaviour {
     private bool wallNorthArrived = false;
     private bool wallSouthArrived = false;
 
-    private bool moveBall = false;
-    private bool moveWalls = false;
-    private bool moveBase = false;
-
-
+    
     // Use this for initialization
     void Start() {
 
@@ -226,9 +223,9 @@ public class BuildMinigamePlatform : MonoBehaviour {
         wallNorthSpawn = new Vector3(Random.Range(100f, 300f), Random.Range(300f, 500f), 0);
         wallSouthSpawn = new Vector3(Random.Range(-300f, 300f), Random.Range(300f, 500f), 0);
 
-        ballSpawn = new Vector3(152.4f, 220, -16f);
+        ballSpawn = new Vector3(152.4f, 280, -16f);
 
-        baseSpawnPosition = new Vector3(Random.Range(100f, 300f), Random.Range(300f, 500f), Random.Range(100f, 300f));
+        baseSpawnPosition = new Vector3(Random.Range(100f, 100f), Random.Range(100f, 300f), Random.Range(100f, 300f));
 
     }
 
@@ -292,7 +289,7 @@ public class BuildMinigamePlatform : MonoBehaviour {
 
         if (miniGameBase.transform.localPosition != basePosition) {
 
-            miniGameBase.transform.localPosition = Vector3.MoveTowards(miniGameBase.transform.localPosition, basePosition, Time.deltaTime * 50f);
+            miniGameBase.transform.localPosition = Vector3.MoveTowards(miniGameBase.transform.localPosition, basePosition, Time.deltaTime * 300f);
 
         } else if (miniGameBase.transform.localPosition == basePosition) {
 
@@ -306,7 +303,7 @@ public class BuildMinigamePlatform : MonoBehaviour {
          
         if (ball.transform.localPosition != ballDestination && baseArrived){
 
-            ball.transform.localPosition = Vector3.MoveTowards(ball.transform.localPosition, ballDestination, Time.deltaTime * 50f);
+            ball.transform.localPosition = Vector3.MoveTowards(ball.transform.localPosition, ballDestination, Time.deltaTime * 100f);
 
         } else if (ball.transform.localPosition == ballDestination) {
 
@@ -321,7 +318,7 @@ public class BuildMinigamePlatform : MonoBehaviour {
 
         if (wallEast.transform.localPosition != wallEastDestination) {
 
-            wallEast.transform.localPosition = Vector3.MoveTowards(wallEast.transform.localPosition, wallEastDestination, Time.deltaTime * 50f);
+            wallEast.transform.localPosition = Vector3.MoveTowards(wallEast.transform.localPosition, wallEastDestination, Time.deltaTime * 80f);
 
         } else {
 
@@ -332,9 +329,9 @@ public class BuildMinigamePlatform : MonoBehaviour {
 
         if (wallNorth.transform.localPosition != wallNorthDestination) {
 
-            wallNorth.transform.localPosition = Vector3.MoveTowards(wallNorth.transform.localPosition, wallNorthDestination, Time.deltaTime * 50f);
+            wallNorth.transform.localPosition = Vector3.MoveTowards(wallNorth.transform.localPosition, wallNorthDestination, Time.deltaTime * 80f);
 
-        } else {
+        } else { 
 
             Debug.Log("WallNorth ist da");
             wallNorthArrived = true;
@@ -343,7 +340,7 @@ public class BuildMinigamePlatform : MonoBehaviour {
 
         if (wallSouth.transform.localPosition != wallSouthDestination) {
 
-            wallSouth.transform.localPosition = Vector3.MoveTowards(wallSouth.transform.localPosition, wallSouthDestination, Time.deltaTime * 50f);
+            wallSouth.transform.localPosition = Vector3.MoveTowards(wallSouth.transform.localPosition, wallSouthDestination, Time.deltaTime * 80f);
 
         } else {
 
@@ -354,7 +351,7 @@ public class BuildMinigamePlatform : MonoBehaviour {
 
         if (wallWest.transform.localPosition != wallWestDestination) {
 
-            wallWest.transform.localPosition = Vector3.MoveTowards(wallWest.transform.localPosition, wallWestDestination, Time.deltaTime * 50f);
+            wallWest.transform.localPosition = Vector3.MoveTowards(wallWest.transform.localPosition, wallWestDestination, Time.deltaTime * 80f);
 
         } else {
 
