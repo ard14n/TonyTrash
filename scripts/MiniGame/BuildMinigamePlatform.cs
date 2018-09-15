@@ -33,10 +33,20 @@ public class BuildMinigamePlatform : MonoBehaviour {
     private Vector3 wallWestSpawn;
     private Vector3 wallWestDestination;
 
+    [Header("Material Settings")]
     public Material baseMaterial;
     public Material sphereMaterial;
 
+    [Header("Toggle Build")]
     public bool startBuilding = false;
+
+    private bool baseArrived = false;
+    private bool ballArrived = false;
+    private bool wallWestArrived = false;
+    private bool wallEastArrived = false;
+    private bool wallNorthArrived = false;
+    private bool wallSouthArrived = false;
+
     
     // Use this for initialization
     void Start() {
@@ -57,13 +67,12 @@ public class BuildMinigamePlatform : MonoBehaviour {
 
         if (startBuilding) {
 
-            MoveToDestination();
+            MoveAll();
+            CheckBuildState();
 
         }
 
     }
-
-    
 
     private void BuildBase() {
         
@@ -158,9 +167,12 @@ public class BuildMinigamePlatform : MonoBehaviour {
         ball.AddComponent<SphereCollider>();
 
         ballbody = ball.AddComponent<Rigidbody>();
+
+        ballbody.useGravity = false;
         ballbody.mass = 7;
-        ballbody.useGravity = true;
+        ballbody.isKinematic = false;
         ballbody.drag = 0;
+        ballbody.angularDrag = 0;
 
         try {
 
@@ -181,8 +193,8 @@ public class BuildMinigamePlatform : MonoBehaviour {
         miniGamePivotPoint = new GameObject("DynamicPivotPoint");
        
         miniGamePivotPoint.transform.SetParent(minigame.transform);
-        ScaleGameObject(miniGamePivotPoint, 100f, 10f, 100f);
         miniGamePivotPoint.transform.localPosition = pivotDestination;
+        ScaleGameObject(miniGamePivotPoint, 100f, 10f, 100f);
 
         miniGamePivotPoint.AddComponent<MiniGameController>();
 
@@ -206,25 +218,25 @@ public class BuildMinigamePlatform : MonoBehaviour {
 
     private void GenerateSpawnPoints() {
 
-        wallEastSpawn = new Vector3(300, 300, -300);
-        wallWestSpawn = new Vector3(300, 300, 300);
-        wallNorthSpawn = new Vector3(300, 300, 0);
-        wallSouthSpawn = new Vector3(-300, 300, 0);
+        wallEastSpawn = new Vector3(Random.Range(100f,300f), Random.Range(300f, 500f), Random.Range(-300f, 300f));
+        wallWestSpawn = new Vector3(Random.Range(100f, 300f), Random.Range(300f, 500f), Random.Range(100f, 300f));
+        wallNorthSpawn = new Vector3(Random.Range(100f, 300f), Random.Range(300f, 500f), 0);
+        wallSouthSpawn = new Vector3(Random.Range(-300f, 300f), Random.Range(300f, 500f), 0);
 
-        ballSpawn = new Vector3(1000, 1000, 1000);
+        ballSpawn = new Vector3(152.4f, 280, -16f);
 
-        baseSpawnPosition = new Vector3(500, 500, 500);
+        baseSpawnPosition = new Vector3(Random.Range(100f, 100f), Random.Range(100f, 300f), Random.Range(100f, 300f));
 
     }
 
     private void GeneratePositionPoints() {
 
-        basePosition = new Vector3(0f, 0.0470001f, 0f);
+        basePosition = new Vector3(0f, 0.047f, 0f);
         ballDestination = new Vector3(152.4f, 191.3f, -16f);
-        wallEastDestination = new Vector3(0.001826477f, 0.9599999f, -0.477f);
-        wallNorthDestination = new Vector3(0.4738264f, 0.9299999f, 0f);
-        wallSouthDestination = new Vector3(-0.4761735f, 0.95f, -0.001000004f);
-        wallWestDestination = new Vector3(0.001826477f, 0.9599999f, 0.472f);
+        wallEastDestination = new Vector3(0.001826477f, 0.96f, -0.477f);
+        wallNorthDestination = new Vector3(0.4738264f, 0.93f, 0f);
+        wallSouthDestination = new Vector3(-0.4761735f, 0.95f, -0.001f);
+        wallWestDestination = new Vector3(0.001826477f, 0.96f, 0.472f);
 
     }
      
@@ -263,23 +275,118 @@ public class BuildMinigamePlatform : MonoBehaviour {
 
     }
 
-    private void MoveToDestination(){
+    private void MoveAll(){
 
-        miniGameBase.transform.localPosition = Vector3.Lerp(miniGameBase.transform.localPosition, basePosition, Time.deltaTime*100f);
-        ball.transform.localPosition = Vector3.Lerp(ball.transform.localPosition, ballDestination, Time.deltaTime);
-        wallEast.transform.localPosition = Vector3.Lerp(wallEast.transform.localPosition, wallEastDestination, Time.deltaTime);
-        wallNorth.transform.localPosition = Vector3.Lerp(wallNorth.transform.localPosition, wallNorthDestination, Time.deltaTime);
-        wallSouth.transform.localPosition = Vector3.Lerp(wallSouth.transform.localPosition, wallSouthDestination, Time.deltaTime);
-        wallWest.transform.localPosition = Vector3.Lerp(wallWest.transform.localPosition, wallWestDestination, Time.deltaTime);
+        MoveBase();
+        MoveBall();
+        MoveWalls();
+        
+    }
+    
+    
+    private void MoveBase() {
+    
+
+        if (miniGameBase.transform.localPosition != basePosition) {
+
+            miniGameBase.transform.localPosition = Vector3.MoveTowards(miniGameBase.transform.localPosition, basePosition, Time.deltaTime * 300f);
+
+        } else if (miniGameBase.transform.localPosition == basePosition) {
+
+            baseArrived = true;
+                
+        }
 
     }
 
-    
-    
+    private void MoveBall() {
+         
+        if (ball.transform.localPosition != ballDestination && baseArrived){
+
+            ball.transform.localPosition = Vector3.MoveTowards(ball.transform.localPosition, ballDestination, Time.deltaTime * 100f);
+
+        } else if (ball.transform.localPosition == ballDestination) {
+
+            Debug.Log("Kugel ist da");
+            ballArrived = true;
+                
+        } 
+       
+    }
+
+    private void MoveWalls() {
+
+        if (wallEast.transform.localPosition != wallEastDestination) {
+
+            wallEast.transform.localPosition = Vector3.MoveTowards(wallEast.transform.localPosition, wallEastDestination, Time.deltaTime * 80f);
+
+        } else {
+
+            Debug.Log("WallEast ist da");
+            wallEastArrived = true;
+
+        }
+
+        if (wallNorth.transform.localPosition != wallNorthDestination) {
+
+            wallNorth.transform.localPosition = Vector3.MoveTowards(wallNorth.transform.localPosition, wallNorthDestination, Time.deltaTime * 80f);
+
+        } else { 
+
+            Debug.Log("WallNorth ist da");
+            wallNorthArrived = true;
+
+        }
+
+        if (wallSouth.transform.localPosition != wallSouthDestination) {
+
+            wallSouth.transform.localPosition = Vector3.MoveTowards(wallSouth.transform.localPosition, wallSouthDestination, Time.deltaTime * 80f);
+
+        } else {
+
+            Debug.Log("WallSouth ist da");
+            wallSouthArrived = true;
+
+        }
+
+        if (wallWest.transform.localPosition != wallWestDestination) {
+
+            wallWest.transform.localPosition = Vector3.MoveTowards(wallWest.transform.localPosition, wallWestDestination, Time.deltaTime * 80f);
+
+        } else {
+
+            Debug.Log("WallWest ist da");
+            wallWestArrived = true;
+
+        }
+
+
+
+    }
+
+    private void CheckBuildState() {
+
+        if (baseArrived && ballArrived && wallNorthArrived && wallWestArrived && wallEastArrived && wallSouthArrived) {
+
+            ballbody.useGravity = true;
+            StopBuilding();
+            Debug.Log("MiniGame fertig gebaut");
+
+        }
+
+    }
+
     public void StartBuilding() {
 
-       
         this.startBuilding = true;
 
     }
+
+    public void StopBuilding() {
+
+        this.startBuilding = false;
+
+    }
+
+    
 }
