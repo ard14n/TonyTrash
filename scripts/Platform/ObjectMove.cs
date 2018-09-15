@@ -51,9 +51,25 @@ public class ObjectMove : MonoBehaviour {
         }
     }
 
-  
-	// Use this for initialization
-	void Start () {
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject == Player)
+        {
+            Player.transform.parent = transform;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject == Player)
+        {
+            Player.transform.parent = null;
+        }
+    }
+
+
+    // Use this for initialization
+    void Start () {
         
     }
 	
