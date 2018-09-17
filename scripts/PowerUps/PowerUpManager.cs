@@ -9,6 +9,7 @@ public class PowerUpManager : MonoBehaviour {
     private GameObject magnet;
     private SphereCollider spherecol;
     private bool magnetTriggered;
+    private GameObject boss;
 
     
     /*RadiusKill Variablen*/
@@ -22,7 +23,7 @@ public class PowerUpManager : MonoBehaviour {
         Debug.Log("Leben bevor Nutzung des PU" + gameManager.GetComponent<Health>().GetCurrentHealth());
 
         if (gameManager.GetComponent<Health>().GetCurrentHealth() < 5) {
-            gameManager.GetComponent<Health>().HealPlayer(1);
+            gameManager.GetComponent<Health>().HealPlayer(4);
             GameObject.Find("Player").GetComponent<Inventory>().RemoveLife();
 
         } else {
@@ -125,7 +126,13 @@ public class PowerUpManager : MonoBehaviour {
                 //LightDestroyEffect(enemyposition);
                 Destroy(element.gameObject);
             }
-			
+
+            if (element.gameObject.tag == "Boss")
+            {
+                boss = GameObject.Find("Boss");
+                boss.GetComponent<BossScript>().MinusHealth();
+            }
+
         }
         
     }
