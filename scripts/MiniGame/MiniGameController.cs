@@ -72,7 +72,7 @@ public class MiniGameController : MonoBehaviour {
 
     private void KeyController() {
         
-
+        /* Maussteuerung wird in unserer Version nicht verwendet 
         if(Input.GetAxis("Mouse X") < 20f && Input.GetAxis("Mouse X") > 0f ){
 
             
@@ -101,7 +101,7 @@ public class MiniGameController : MonoBehaviour {
             Quaternion target = Quaternion.Euler(0f, 0f, angledown);
             transform.rotation = Quaternion.Lerp(transform.rotation, target, Time.deltaTime * smoothness);
 
-        }
+        }*/
 
 
 
@@ -138,7 +138,7 @@ public class MiniGameController : MonoBehaviour {
         }
 
         Quaternion defaultposition = Quaternion.Euler(0f, 0f, 0f);
-        transform.rotation = Quaternion.Lerp(transform.rotation, defaultposition, Time.deltaTime * 0.001f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, defaultposition, Time.deltaTime * smoothness);
 
 
     }
