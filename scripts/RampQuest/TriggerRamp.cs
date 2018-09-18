@@ -4,25 +4,15 @@ using UnityEngine;
 
 public class TriggerRamp : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-
-        GetComponent<Renderer>().material.color = Color.red;
-
-	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-
-
-	}
-
-
     void OnTriggerEnter(Collider col){
 
-        GetComponent<Renderer>().material.color = Color.green;
-        GameObject.Find("Ramp").GetComponent<BezierCurve>().ActivateTrigger();
+        if (col.tag == "PushBoxRamp") {
 
+            GetComponent<Renderer>().material.color = Color.green;
+            GameObject.Find("RampGate").GetComponent<RampGate>().OpenRampGate();
+
+        }
+        
     }
 }
