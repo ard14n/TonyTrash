@@ -10,7 +10,6 @@ Der Planet versinkt im Müll. Begleite Tony Trash auf seiner Mission, den Planet
 - Felix Schmidt (SchFelix)
 - Josephine Eckhoff (JosephineEck)
 - Marc Rosenkranz (IchHeisseMarc)
-- Simon Evers (CaptainFlint0)
 - Ardian Jahja (ard14n)
 
 

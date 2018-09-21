@@ -18,10 +18,10 @@ public class FinishGameTrigger : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
 
-        if(other.tag == "MiniGameSphere") {
+        if (other.name == "Kugel") {
 
             Debug.Log("Kugel hat Ziel erreicht");
-            GameObject.Find("MiniGamePivot").GetComponent<MiniGameController>().SetMiniGameWon();
+            GameObject.Find("DynamicPivotPoint").GetComponent<MiniGameController>().SetMiniGameWon();
             
         }
     }
