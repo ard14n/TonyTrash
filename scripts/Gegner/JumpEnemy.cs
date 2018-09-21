@@ -12,6 +12,7 @@ public class JumpEnemy : MonoBehaviour {
     private int sightRange;
     private float xdis;
     private float zdis;
+    public int abweichung;
 
 	// Use this for initialization
 	void Start () {
@@ -24,7 +25,7 @@ public class JumpEnemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Time.frameCount % 100 == 0){
+        if ((Time.frameCount + abweichung) % 100 == 0){
             Collider[] enemys = Physics.OverlapSphere(transform.position, sightRange);
 
             foreach (Collider element in enemys)
@@ -46,13 +47,13 @@ public class JumpEnemy : MonoBehaviour {
         }
 
         if (inRange){
-            if (Time.frameCount % 100 >= 0 && Time.frameCount % 100 <= 24){
+            if ((Time.frameCount + abweichung) % 100 >= 0 && (Time.frameCount + abweichung) % 100 <= 24){
                 transform.position = new Vector3(transform.position.x - (xdis / 50), transform.position.y + (maxHeight / 20), transform.position.z - (zdis / 50)); 
             }
-            if (Time.frameCount % 100 >= 25 && Time.frameCount % 100 <= 49){
+            if ((Time.frameCount + abweichung) % 100 >= 25 && (Time.frameCount + abweichung) % 100 <= 49){
                 transform.position = new Vector3(transform.position.x - (xdis / 50), transform.position.y - (maxHeight / 20), transform.position.z - (zdis / 50));
             }
-            if (Time.frameCount % 100 == 50){
+            if ((Time.frameCount + abweichung) % 100 == 50){
                 inRange = false;
             }
         }

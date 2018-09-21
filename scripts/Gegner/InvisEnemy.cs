@@ -15,6 +15,7 @@ public class InvisEnemy : MonoBehaviour {
         Color col = gameObject.GetComponent<Renderer>().material.color;
         col.a = 0.1f;
         gameObject.GetComponent<Renderer>().material.color = col;
+
     }
 
     void Update()
@@ -22,9 +23,11 @@ public class InvisEnemy : MonoBehaviour {
 
         RaycastHit downR;
         Ray downRay = new Ray(transform.position, -Vector3.up);
-        Physics.Raycast(downRay, out downR, Mathf.Infinity);
-        float down = downR.distance - 1f;
-        transform.position = new Vector3(transform.position.x, transform.position.y - down, transform.position.z);
+        if (Physics.Raycast(downRay, out downR, 2.0f))
+        {
+            float down = downR.distance;
+            transform.position = new Vector3(transform.position.x, transform.position.y - down, transform.position.z);
+        }
 
         enemyInRange = false;
         Collider[] enemys = Physics.OverlapSphere(transform.position, sightRange);

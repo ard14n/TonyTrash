@@ -36,12 +36,13 @@ public class FollowShooter : MonoBehaviour
         if (enemyInRange)
         {
 
-            angle = Vector3.Angle(transform.position, target.transform.position);
-            transform.eulerAngles = new Vector3(0, angle, 0);
+            //angle = Vector3.Angle(transform.position, target.transform.position);
+            //transform.eulerAngles = new Vector3(0, angle, 0);
 
             if (Time.frameCount % 200 == 0)
             {
                 GameObject newBall = Instantiate(ball, transform.position, transform.rotation) as GameObject;
+                newBall.transform.position = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
                 newBall.AddComponent<FollowPlayer>();
                 newBall.AddComponent<DamagePlayer>();
                 var destroyTime = 3;

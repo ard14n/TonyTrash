@@ -16,7 +16,7 @@ public class FollowPlayer : MonoBehaviour {
 
 
 
-        transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 8f * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 5f * Time.deltaTime);
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 		
 	}

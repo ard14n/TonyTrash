@@ -12,16 +12,17 @@ public class BossScript : MonoBehaviour {
     public GameObject target;
     private int attack;
     public float range;
-    public GameObject ball;
+    public GameObject directBall;
+    public GameObject followBall;
     public float speed;
     public int health;
-    public int counter;
-    public int lastA;
+    private int counter;
+    private int lastA;
     private float maxHeight;
     private Vector3 targetPosi;
     private float xdis;
     private float zdis;
-    private float angle;
+    private int direction;
 
     void Start ()
     {
@@ -31,16 +32,16 @@ public class BossScript : MonoBehaviour {
         counter = 0;
         maxHeight = 20.0f;
         lastA = 0;
+        RaycastHit downR;
+        Ray downRay = new Ray(transform.position, -Vector3.up);
+        Physics.Raycast(downRay, out downR, Mathf.Infinity);
+        float down = downR.distance;
+        transform.position = new Vector3(transform.position.x, transform.position.y - down, transform.position.z);
+        direction = -1;
     }
-	
+
     void Update ()
     {
-        //RaycastHit downR;
-        //Ray downRay = new Ray(transform.position, -Vector3.up);
-        //Physics.Raycast(downRay, out downR, Mathf.Infinity);
-        //float down = downR.distance - 2.5f;
-        //transform.position = new Vector3(transform.position.x, transform.position.y - down, transform.position.z);
-
         enemyInRange = false;
         Collider[] enemys = Physics.OverlapSphere(transform.position, sightRange);
 
@@ -95,41 +96,149 @@ public class BossScript : MonoBehaviour {
             case 0:
                 if (enemyInRange)
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 3f * Time.deltaTime);
+                    new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z), 10f * Time.deltaTime);
                     transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
                 }
                 break;
 
             case 1:
                 lastA = 1;
-                transform.eulerAngles = new Vector3(0, Time.frameCount*2, 0);
-                if (Time.frameCount % 6 == 0)
+                transform.eulerAngles = new Vector3(-90, Time.frameCount*2, 0);
+                if (Time.frameCount % 4 == 0)
                 {
-                    GameObject newBall = Instantiate(ball, transform.position, transform.rotation) as GameObject;
-                    newBall.GetComponent<Rigidbody>().velocity = transform.forward.normalized * speed;
+                    GameObject newBall = Instantiate(directBall, transform.position, transform.rotation) as GameObject;
+                    newBall.transform.position = new Vector3(transform.position.x, transform.position.y+3, transform.position.z);
+                    direction++;
+                    switch (direction)
+                    {
+                        case 0:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(1, 0, 1).normalized * speed;
+                            break;
+                        case 1:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(1, 0, 0.5f).normalized * speed;
+                            break;
+                        case 2:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(1, 0, 0).normalized * speed;
+                            break;
+                        case 3:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(1, 0, -0.5f).normalized * speed;
+                            break;
+                        case 4:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(1, 0, -1).normalized * speed;
+                            break;
+                        case 5:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(0.5f, 0, -1).normalized * speed;
+                            break;
+                        case 6:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, -1).normalized * speed;
+                            break;
+                        case 7:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(-0.5f, 0, -1).normalized * speed;
+                            break;
+                        case 8:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(-1, 0, -1).normalized * speed;
+                            break;
+                        case 9:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(-1, 0, -0.5f).normalized * speed;
+                            break;
+                        case 10:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(-1, 0, 0).normalized * speed;
+                            break;
+                        case 11:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(-1, 0, 0.5f).normalized * speed;
+                            break;
+                        case 12:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(-1, 0, 1).normalized * speed;
+                            break;
+                        case 13:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(-0.5f, 0, 1).normalized * speed;
+                            break;
+                        case 14:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 1).normalized * speed;
+                            break;
+                        case 15:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(0.5f, 0, 1).normalized * speed;
+                            direction = -1;
+                            break;
+                    }
                     newBall.AddComponent<DamagePlayer>();
                     var destroyTime = 2;
                     Destroy(newBall, destroyTime);
 
-                } else if((Time.frameCount + 3) % 6 == 0){
-                    GameObject newBall = Instantiate(ball, transform.position, transform.rotation) as GameObject;
-                    newBall.GetComponent<Rigidbody>().velocity = -transform.forward.normalized * speed;
+                } else if((Time.frameCount + 2) % 4 == 0){
+                    GameObject newBall = Instantiate(directBall, transform.position, transform.rotation) as GameObject;
+                    newBall.transform.position = new Vector3(transform.position.x, transform.position.y + 3, transform.position.z);
+                    switch (direction)
+                    {
+                        case 0:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(-1, 0, -1).normalized * speed;
+                            break;
+                        case 1:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(-1, 0, -0.5f).normalized * speed;
+                            break;
+                        case 2:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(-1, 0, 0).normalized * speed;
+                            break;
+                        case 3:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(-1, 0, 0.5f).normalized * speed;
+                            break;
+                        case 4:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(-1, 0, 1).normalized * speed;
+                            break;
+                        case 5:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(-0.5f, 0, 1).normalized * speed;
+                            break;
+                        case 6:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 1).normalized * speed;
+                            break;
+                        case 7:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(0.5f, 0, 1).normalized * speed;
+                            direction = -1;
+                            break;
+                        case 8:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(1, 0, 1).normalized * speed;
+                            break;
+                        case 9:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(1, 0, 0.5f).normalized * speed;
+                            break;
+                        case 10:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(1, 0, 0).normalized * speed;
+                            break;
+                        case 11:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(1, 0, -0.5f).normalized * speed;
+                            break;
+                        case 12:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(1, 0, -1).normalized * speed;
+                            break;
+                        case 13:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(0.5f, 0, -1).normalized * speed;
+                            break;
+                        case 14:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, -1).normalized * speed;
+                            break;
+                        case 15:
+                            newBall.GetComponent<Rigidbody>().velocity = new Vector3(-0.5f, 0, -1).normalized * speed;
+                            break;
+                    }
                     newBall.AddComponent<DamagePlayer>();
                     var destroyTime = 2;
                     Destroy(newBall, destroyTime);
                 }
+                enemyInRange = false;
                 break;
 
             case 2:
                 lastA = 2;
                 if (enemyInRange)
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 12f * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z), 20f * Time.deltaTime);
                     transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
                     if ((Time.frameCount - 150) % 600 == 0){
                         attack = 0;
                     }
                 }
+                enemyInRange = false;
                 break;
 
             case 3:
@@ -161,26 +270,23 @@ public class BossScript : MonoBehaviour {
                     enemyInRange = false;
                     }
                 }
+                enemyInRange = false;
                 break;
 
             case 4:
                 lastA = 4;
                 if (enemyInRange)
                 {
-
-                    angle = Vector3.Angle(transform.position, target.transform.position);
-                    transform.eulerAngles = new Vector3(0, angle, 0);
-
                     if (Time.frameCount % 50 == 0)
                     {
-                        GameObject newBall = Instantiate(ball, transform.position, transform.rotation) as GameObject;
-                        newBall.AddComponent<BossFollow>();
+                        GameObject newBall = Instantiate(followBall, transform.position, transform.rotation) as GameObject;
+                        newBall.transform.position = new Vector3(transform.position.x, transform.position.y + 3, transform.position.z);
                         newBall.AddComponent<DamagePlayer>();
                         var destroyTime = 3;
                         Destroy(newBall, destroyTime);
                     }
                 }
-
+                enemyInRange = false;
                 break;
         }
 

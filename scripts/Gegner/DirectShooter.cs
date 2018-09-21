@@ -6,7 +6,7 @@ public class DirectShooter : MonoBehaviour {
 
     private bool enemyInRange;
     public float sightRange;
-    public GameObject target;
+    private GameObject target;
     public GameObject ball;
     public float speed;
     private float angle;
@@ -34,21 +34,15 @@ public class DirectShooter : MonoBehaviour {
         }
 
         if (enemyInRange){
-
-            angle = Vector3.Angle(transform.position, target.transform.position);
-            transform.eulerAngles = new Vector3(0, angle, 0);
-
             if (Time.frameCount % 40 == 0)
             {
                 GameObject newBall = Instantiate(ball, transform.position, transform.rotation) as GameObject;
                 newBall.GetComponent<Rigidbody>().velocity = (target.transform.position - transform.position).normalized * speed;
+                newBall.transform.position = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
                 newBall.AddComponent<DamagePlayer>();
                 var destroyTime = 0.8f;
                 Destroy(newBall, destroyTime);
             }
         }
-
-
-
     }
 }
